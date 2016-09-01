@@ -30,7 +30,7 @@ OBJECTS = \
 	tlv.o \
 	wdt_a.o \
 
-CFLAGS += \
-	-I $(SRC_ROOT)/include/$(LIB) \
-
 override SRC_ROOT = ../../src
+
+CFLAGS += \
+	-I$(SRC_ROOT)/include/$(LIB) \
