@@ -528,6 +528,10 @@ void EUSCI_B_I2C_masterReceiveStart(uint16_t baseAddress)
 
 uint8_t EUSCI_B_I2C_masterReceiveMultiByteNext(uint16_t baseAddress)
 {
+    while(!(HWREG16(baseAddress + OFS_UCBxIFG) & UCRXIFG))
+    {
+       ;
+    }
     return (HWREG16(baseAddress + OFS_UCBxRXBUF));
 }
 
