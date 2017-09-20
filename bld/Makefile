@@ -1,5 +1,14 @@
 LIB = libmspware
 
+ifeq ($(TOOLCHAIN),gcc)
+DEPS += libmspbuiltins
+else # TOOLCHAIN == gcc 
+CFLAGS += -I$(LIB_ROOT)/libmspbuiltins/src/include
+LFLAGS += -L$(LIB_ROOT)/libmspbuiltins/bld/gcc
+LIBS += -lmspbuiltins
+endif # TOOLCHAIN != gcc
+
+
 OBJECTS = \
 	adc12_b.o \
 	aes256.o \
