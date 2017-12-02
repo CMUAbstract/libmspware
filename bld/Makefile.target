@@ -6,8 +6,8 @@ else # TOOLCHAIN != gcc
 
 # libmspware is special because it has to be compiled by GCC, not Clang,
 # even if the app is built with Clang
-CFLAGS += -I$(LIB_ROOT)/libmspware/src/include
-LFLAGS += -L$(LIB_ROOT)/libmspware/bld/gcc
+override CFLAGS += -I$(LIB_ROOT)/libmspware/src/include
+override LFLAGS += -L$(LIB_ROOT)/libmspware/bld/gcc
 LIBS += -lmspware
 
 endif # TOOLCHAIN != gcc
