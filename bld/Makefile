@@ -1,6 +1,6 @@
 LIB = libmspware
 
-ifeq ($(TOOLCHAIN),gcc)
+ifeq ($(TOOLCHAIN),$(filter $(TOOLCHAIN),gcc coatigcc))
 DEPS += libmspbuiltins
 else # TOOLCHAIN == gcc 
 CFLAGS += -I$(LIB_ROOT)/libmspbuiltins/src/include
