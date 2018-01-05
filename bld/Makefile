@@ -24,6 +24,7 @@ OBJECTS = \
 	eusci_b_spi.o \
 	framctl.o \
 	gpio.o \
+  i2c_setup.o \
 	lcd_c.o \
 	mpu.o \
 	mpy32.o \
