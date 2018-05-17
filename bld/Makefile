@@ -45,6 +45,8 @@ ifeq ($(FAMILYDEF),__MSP430FR__)
 FAMILY_DIR = MSP430FR5xx_6xx
 else ifeq ($(FAMILYDEF),__MSP430F__)
 FAMILY_DIR = MSP430F5xx_6xx
+else # FAMILYDEF
+$(error Unsupported or unimplemented MCU family)
 endif # FAMILYDEF
 
 override SRC_ROOT = ../../src/$(FAMILY_DIR)
