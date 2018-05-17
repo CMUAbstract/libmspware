@@ -1,0 +1,12 @@
+# Defines FAMILY_DIR variable with the path to the source
+# This switch is not exhaustive, we has branches only for families we use so far
+
+ifeq ($(FAMILYDEF),__MSP430FR__)
+FAMILY_DIR = MSP430FR5xx_6xx
+else ifeq ($(FAMILYDEF),__MSP430F__)
+FAMILY_DIR = MSP430F5xx_6xx
+else # FAMILYDEF
+$(error Unsupported or unimplemented MCU family)
+endif
+
+export FAMILY_DIR

@@ -12,7 +12,6 @@ endif # TOOLCHAIN != gcc
 # FAMILYDEF is defined by Maker
 # This switch is not exhaustive, we has branches only for families we use so far
 ifeq ($(FAMILYDEF),__MSP430FR__)
-FAMILY_DIR = MSP430FR5xx_6xx
 
 OBJECTS = \
 	adc12_b.o \
@@ -51,7 +50,6 @@ OBJECTS = \
 	uups.o \
 
 else ifeq ($(FAMILYDEF),__MSP430F__)
-FAMILY_DIR = MSP430F5xx_6xx
 
 OBJECTS = \
 	adc10_a.o \
@@ -99,6 +97,8 @@ OBJECTS = \
 else # FAMILYDEF
 $(error Unsupported or unimplemented MCU family)
 endif # FAMILYDEF
+
+include ../Makefile.family # defines FAMILY_DIR
 
 override SRC_ROOT = ../../src/$(FAMILY_DIR)
 
