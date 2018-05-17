@@ -43,7 +43,7 @@ OBJECTS = \
 # This switch is not exhaustive, we has branches only for families we use so far
 ifeq ($(FAMILYDEF),__MSP430FR__)
 FAMILY_DIR = MSP430FR5xx_6xx
-else ifeq ($(FAMILYDEF),__CC430__)
+else ifeq ($(FAMILYDEF),__MSP430F__)
 FAMILY_DIR = MSP430F5xx_6xx
 endif # FAMILYDEF
 
