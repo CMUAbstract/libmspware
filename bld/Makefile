@@ -38,6 +38,12 @@ OBJECTS = \
 	timer_b.o \
 	tlv.o \
 	wdt_a.o \
+	framctl_a.o \
+	hspll.o \
+	mtif.o \
+	saph.o \
+	sdhs.o \
+	uups.o \
 
 # FAMILYDEF is defined by Maker
 # This switch is not exhaustive, we has branches only for families we use so far
