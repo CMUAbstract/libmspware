@@ -39,7 +39,15 @@ OBJECTS = \
 	tlv.o \
 	wdt_a.o \
 
-override SRC_ROOT = ../../src
+# FAMILYDEF is defined by Maker
+# This switch is not exhaustive, we has branches only for families we use so far
+ifeq ($(FAMILYDEF),__MSP430FR__)
+FAMILY_DIR = MSP430FR5xx_6xx
+else ifeq ($(FAMILYDEF),__CC430__)
+FAMILY_DIR = MSP430F5xx_6xx
+endif # FAMILYDEF
+
+override SRC_ROOT = ../../src/$(FAMILY_DIR)
 
 override CFLAGS += \
-	-I$(SRC_ROOT)/include/$(LIB) \
+	-I$(SRC_ROOT) \
