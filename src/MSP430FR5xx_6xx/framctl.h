@@ -1,5 +1,5 @@
 /* --COPYRIGHT--,BSD
- * Copyright (c) 2014, Texas Instruments Incorporated
+ * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -207,13 +207,13 @@ extern void FRAMCtl_enableInterrupt(uint8_t interruptMask);
 //!           FRAMCtl memory error detection logic.
 //!
 //! \return Logical OR of any of the following:
-//!         - \b FRAMCtl_ACCESS_TIME_ERROR_FLAG Interrupt flag is set if a
+//!         - \b FRAMCTL_ACCESS_TIME_ERROR_FLAG Interrupt flag is set if a
 //!         wrong setting for NPRECHG and NACCESS is set and FRAMCtl access
 //!         time is not hold.
-//!         - \b FRAMCtl_UNCORRECTABLE_BIT_FLAG Interrupt flag is set if an
+//!         - \b FRAMCTL_UNCORRECTABLE_BIT_FLAG Interrupt flag is set if an
 //!         uncorrectable bit error has been detected in the FRAMCtl memory
 //!         error detection logic.
-//!         - \b FRAMCtl_CORRECTABLE_BIT_FLAG Interrupt flag is set if a
+//!         - \b FRAMCTL_CORRECTABLE_BIT_FLAG Interrupt flag is set if a
 //!         correctable bit error has been detected and corrected in the
 //!         FRAMCtl memory error detection logic.
 //!         \n indicating the status of the masked flags

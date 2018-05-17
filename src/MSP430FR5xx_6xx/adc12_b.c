@@ -1,5 +1,5 @@
 /* --COPYRIGHT--,BSD
- * Copyright (c) 2014, Texas Instruments Incorporated
+ * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -49,8 +49,7 @@
 
 #include <assert.h>
 
-bool ADC12_B_init(uint16_t baseAddress,
-                  ADC12_B_initParam *param)
+bool ADC12_B_init(uint16_t baseAddress, ADC12_B_initParam *param)
 {
     //Make sure the ENC bit is cleared before initializing the ADC12
     HWREG8(baseAddress + OFS_ADC12CTL0_L) &= ~ADC12ENC;
@@ -59,12 +58,12 @@ bool ADC12_B_init(uint16_t baseAddress,
 
     //Turn OFF ADC12B Module & Clear Interrupt Registers
     HWREG16(baseAddress + OFS_ADC12CTL0) &= ~(ADC12ON + ADC12ENC + ADC12SC);
-    HWREG16(baseAddress + OFS_ADC12IER0) &= 0x0000;  //Reset ALL interrupt enables
-    HWREG16(baseAddress + OFS_ADC12IER1) &= 0x0000;
-    HWREG16(baseAddress + OFS_ADC12IER2) &= 0x0000;
-    HWREG16(baseAddress + OFS_ADC12IFGR0) &= 0x0000;  //Reset ALL interrupt flags
-    HWREG16(baseAddress + OFS_ADC12IFGR1) &= 0x0000;
-    HWREG16(baseAddress + OFS_ADC12IFGR2) &= 0x0000;
+    HWREG16(baseAddress + OFS_ADC12IER0)  &= 0x0000; //Reset ALL interrupt enables
+    HWREG16(baseAddress + OFS_ADC12IER1)  &= 0x0000;
+    HWREG16(baseAddress + OFS_ADC12IER2)  &= 0x0000;
+    HWREG16(baseAddress + OFS_ADC12IFGR0)  &= 0x0000; //Reset ALL interrupt flags
+    HWREG16(baseAddress + OFS_ADC12IFGR1)  &= 0x0000;
+    HWREG16(baseAddress + OFS_ADC12IFGR2)  &= 0x0000;
 
     //Set ADC12B Control 1
     HWREG16(baseAddress + OFS_ADC12CTL1) =
@@ -81,10 +80,10 @@ bool ADC12_B_init(uint16_t baseAddress,
     HWREG16(baseAddress + OFS_ADC12CTL3) =
         param->internalChannelMap; // Map internal channels
 
-    return (retVal);
+    return (retVal) ;
 }
 
-void ADC12_B_enable(uint16_t baseAddress)
+void ADC12_B_enable (uint16_t baseAddress)
 {
     // Clear ENC bit
     HWREG8(baseAddress + OFS_ADC12CTL0_L) &= ~ADC12ENC;
@@ -93,7 +92,7 @@ void ADC12_B_enable(uint16_t baseAddress)
     HWREG8(baseAddress + OFS_ADC12CTL0_L) |= ADC12ON;
 }
 
-void ADC12_B_disable(uint16_t baseAddress)
+void ADC12_B_disable (uint16_t baseAddress)
 {
     // Clear ENC bit
     HWREG8(baseAddress + OFS_ADC12CTL0_L) &= ~ADC12ENC;
@@ -102,10 +101,10 @@ void ADC12_B_disable(uint16_t baseAddress)
     HWREG8(baseAddress + OFS_ADC12CTL0_L) &= ~ADC12ON;
 }
 
-void ADC12_B_setupSamplingTimer(uint16_t baseAddress,
-                                uint16_t clockCycleHoldCountLowMem,
-                                uint16_t clockCycleHoldCountHighMem,
-                                uint16_t multipleSamplesEnabled)
+void ADC12_B_setupSamplingTimer (uint16_t baseAddress,
+    uint16_t clockCycleHoldCountLowMem,
+    uint16_t clockCycleHoldCountHighMem,
+    uint16_t multipleSamplesEnabled)
 {
     HWREG16(baseAddress + OFS_ADC12CTL1) |= ADC12SHP;
 
@@ -115,90 +114,96 @@ void ADC12_B_setupSamplingTimer(uint16_t baseAddress,
 
     //Set clock cycle hold counts and msc bit
     HWREG16(baseAddress + OFS_ADC12CTL0) |= clockCycleHoldCountLowMem
-                                            + (clockCycleHoldCountHighMem << 4)
-                                            + multipleSamplesEnabled;
+                                          + (clockCycleHoldCountHighMem << 4)
+                                          + multipleSamplesEnabled;
 }
 
-void ADC12_B_disableSamplingTimer(uint16_t baseAddress)
+void ADC12_B_disableSamplingTimer (uint16_t baseAddress)
 {
     HWREG16(baseAddress + OFS_ADC12CTL1) &= ~(ADC12SHP);
 }
 
 void ADC12_B_configureMemory(uint16_t baseAddress,
-                             ADC12_B_configureMemoryParam *param)
+    ADC12_B_configureMemoryParam *param)
 {
-    //Set the offset in respect to ADC12MCTL0
-    uint16_t memoryBufferControlOffset =
-        (OFS_ADC12MCTL0 + param->memoryBufferControlIndex);
+    //Make sure the ENC bit is cleared before configuring a Memory Buffer Control
+    assert( !(HWREG16(baseAddress + OFS_ADC12CTL0) & ADC12ENC) );
 
-    //Reset the memory buffer control and Set the input source
-    HWREG16(baseAddress + memoryBufferControlOffset) =
-        param->inputSourceSelect //Set Input Source
-        + param->refVoltageSourceSelect //Set Vref+/-
-        + param->endOfSequence; //Set End of Sequence
+    if(!(HWREG16(baseAddress + OFS_ADC12CTL0) & ADC12ENC))
+    {
+        //Set the offset in respect to ADC12MCTL0
+        uint16_t memoryBufferControlOffset =
+            (OFS_ADC12MCTL0 + param->memoryBufferControlIndex);
 
-    HWREG16(baseAddress + memoryBufferControlOffset)
-        &= ~(ADC12WINC);
+        //Reset the memory buffer control and Set the input source
+        HWREG16(baseAddress + memoryBufferControlOffset) =
+            param->inputSourceSelect //Set Input Source
+            + param->refVoltageSourceSelect //Set Vref+/-
+            + param->endOfSequence; //Set End of Sequence
 
-    HWREG16(baseAddress + memoryBufferControlOffset)
-        |= param->windowComparatorSelect;
-    //(OFS_ADC12MCTL0_H + memoryIndex) == offset of OFS_ADC12MCTLX_H
+        HWREG16(baseAddress + memoryBufferControlOffset)
+            &= ~(ADC12WINC);
 
-    HWREG16(baseAddress + memoryBufferControlOffset)
-        &= ~(ADC12DIF);
+        HWREG16(baseAddress + memoryBufferControlOffset)
+            |= param->windowComparatorSelect;
+        //(OFS_ADC12MCTL0_H + memoryIndex) == offset of OFS_ADC12MCTLX_H
 
-    HWREG16(baseAddress + memoryBufferControlOffset)
-        |= param->differentialModeSelect;
-    //(OFS_ADC12MCTL0_H + memoryIndex) == offset of OFS_ADC12MCTLX_H
+        HWREG16(baseAddress + memoryBufferControlOffset)
+            &= ~(ADC12DIF);
+
+        HWREG16(baseAddress + memoryBufferControlOffset)
+            |= param->differentialModeSelect;
+        //(OFS_ADC12MCTL0_H + memoryIndex) == offset of OFS_ADC12MCTLX_H
+    }
 }
-
-void ADC12_B_setWindowCompAdvanced(uint16_t baseAddress,
-                                   uint16_t highThreshold,
-                                   uint16_t lowThreshold)
+void ADC12_B_setWindowCompAdvanced (uint16_t baseAddress,
+    uint16_t highThreshold,
+    uint16_t lowThreshold)
 {
     HWREG16(baseAddress + OFS_ADC12HI) = highThreshold;
     HWREG16(baseAddress + OFS_ADC12LO) = lowThreshold;
 }
 
-void ADC12_B_enableInterrupt(uint16_t baseAddress,
-                             uint16_t interruptMask0,
-                             uint16_t interruptMask1,
-                             uint16_t interruptMask2)
+void ADC12_B_enableInterrupt (uint16_t baseAddress,
+    uint16_t interruptMask0,
+    uint16_t interruptMask1,
+    uint16_t interruptMask2)
 {
     HWREG16(baseAddress + OFS_ADC12IER0) |= interruptMask0;
     HWREG16(baseAddress + OFS_ADC12IER1) |= interruptMask1;
     HWREG16(baseAddress + OFS_ADC12IER2) |= interruptMask2;
 }
 
-void ADC12_B_disableInterrupt(uint16_t baseAddress,
-                              uint16_t interruptMask0,
-                              uint16_t interruptMask1,
-                              uint16_t interruptMask2)
+void ADC12_B_disableInterrupt (uint16_t baseAddress,
+    uint16_t interruptMask0,
+    uint16_t interruptMask1,
+    uint16_t interruptMask2)
 {
     HWREG16(baseAddress + OFS_ADC12IER0) &= ~(interruptMask0);
     HWREG16(baseAddress + OFS_ADC12IER1) &= ~(interruptMask1);
     HWREG16(baseAddress + OFS_ADC12IER2) &= ~(interruptMask2);
 }
 
-void ADC12_B_clearInterrupt(uint16_t baseAddress,
-                            uint8_t interruptRegisterChoice,
-                            uint16_t memoryInterruptFlagMask)
+void ADC12_B_clearInterrupt (uint16_t baseAddress,
+	uint8_t interruptRegisterChoice,
+    uint16_t memoryInterruptFlagMask)
 {
-    HWREG16(baseAddress + OFS_ADC12IFGR0 + 2 * interruptRegisterChoice) &=
+	HWREG16(baseAddress + OFS_ADC12IFGR0 + 2*interruptRegisterChoice) &=
         ~(memoryInterruptFlagMask);
+
 }
 
-uint16_t ADC12_B_getInterruptStatus(uint16_t baseAddress,
-                                    uint8_t interruptRegisterChoice,
-                                    uint16_t memoryInterruptFlagMask)
+uint16_t ADC12_B_getInterruptStatus (uint16_t baseAddress,
+	uint8_t interruptRegisterChoice,
+	uint16_t memoryInterruptFlagMask)
 {
-    return (HWREG16(baseAddress + OFS_ADC12IFGR0 + 2 * interruptRegisterChoice)
-            & memoryInterruptFlagMask);
+    return ( HWREG16(baseAddress + OFS_ADC12IFGR0 + 2*interruptRegisterChoice)
+    		& memoryInterruptFlagMask );
 }
 
-void ADC12_B_startConversion(uint16_t baseAddress,
-                             uint16_t startingMemoryBufferIndex,
-                             uint8_t conversionSequenceModeSelect)
+void ADC12_B_startConversion (uint16_t baseAddress,
+    uint16_t startingMemoryBufferIndex,
+    uint8_t conversionSequenceModeSelect)
 {
     //Reset the ENC bit to set the starting memory address and conversion mode
     //sequence
@@ -212,73 +217,66 @@ void ADC12_B_startConversion(uint16_t baseAddress,
     HWREG8(baseAddress + OFS_ADC12CTL0_L) |= ADC12ENC + ADC12SC;
 }
 
-void ADC12_B_disableConversions(uint16_t baseAddress,
-                                bool preempt)
+void ADC12_B_disableConversions (uint16_t baseAddress, bool preempt)
 {
-    if(ADC12_B_PREEMPTCONVERSION == preempt)
-    {
+    if (ADC12_B_PREEMPTCONVERSION == preempt){
         HWREG8(baseAddress + OFS_ADC12CTL1_L) &= ~(ADC12CONSEQ_3);
         //Reset conversion sequence mode to single-channel, single-conversion
-    }
-    else if(~(HWREG8(baseAddress + OFS_ADC12CTL1_L) & ADC12CONSEQ_3))
-    {
+    } else if (~(HWREG8(baseAddress + OFS_ADC12CTL1_L) & ADC12CONSEQ_3)){
         //To prevent preemption of a single-channel, single-conversion we must
         //wait for the ADC core to finish the conversion.
-        while(ADC12_B_isBusy(baseAddress))
-        {
-            ;
-        }
+        while (ADC12_B_isBusy(baseAddress)) ;
     }
 
     HWREG8(baseAddress + OFS_ADC12CTL0_L) &= ~(ADC12ENC);
 }
 
-uint16_t ADC12_B_getResults(uint16_t baseAddress,
-                            uint8_t memoryBufferIndex)
+uint16_t ADC12_B_getResults (uint16_t baseAddress, uint8_t memoryBufferIndex)
 {
-    return (HWREG16(baseAddress + (OFS_ADC12MEM0 + memoryBufferIndex)));
+    return ( HWREG16(baseAddress + (OFS_ADC12MEM0 + memoryBufferIndex)) );
     //(0x60 + memoryBufferIndex) == offset of ADC12MEMx
 }
 
-void ADC12_B_setResolution(uint16_t baseAddress,
-                           uint8_t resolutionSelect)
+void ADC12_B_setResolution (uint16_t baseAddress,
+    uint8_t resolutionSelect)
 {
     HWREG8(baseAddress + OFS_ADC12CTL2_L) &= ~(ADC12RES_3);
     HWREG8(baseAddress + OFS_ADC12CTL2_L) |= resolutionSelect;
 }
 
-void ADC12_B_setSampleHoldSignalInversion(uint16_t baseAddress,
-                                          uint16_t invertedSignal)
+void ADC12_B_setSampleHoldSignalInversion (uint16_t baseAddress,
+    uint16_t invertedSignal)
 {
     HWREG16(baseAddress + OFS_ADC12CTL1) &= ~(ADC12ISSH);
     HWREG16(baseAddress + OFS_ADC12CTL1) |= invertedSignal;
 }
 
-void ADC12_B_setDataReadBackFormat(uint16_t baseAddress,
-                                   uint8_t readBackFormat)
+void ADC12_B_setDataReadBackFormat (uint16_t baseAddress,
+    uint8_t readBackFormat)
 {
     HWREG8(baseAddress + OFS_ADC12CTL2_L) &= ~(ADC12DF);
     HWREG8(baseAddress + OFS_ADC12CTL2_L) |= readBackFormat;
 }
 
-void ADC12_B_setAdcPowerMode(uint16_t baseAddress,
-                             uint8_t powerMode)
+void ADC12_B_setAdcPowerMode (uint16_t baseAddress,
+    uint8_t powerMode)
 {
     HWREG8(baseAddress + OFS_ADC12CTL2_L) &= ~(ADC12PWRMD);
     HWREG8(baseAddress + OFS_ADC12CTL2_L) |= powerMode;
 }
 
-uint32_t ADC12_B_getMemoryAddressForDMA(uint16_t baseAddress,
-                                        uint8_t memoryIndex)
+uint32_t ADC12_B_getMemoryAddressForDMA (uint16_t baseAddress,
+    uint8_t memoryIndex)
 {
-    return (baseAddress + (OFS_ADC12MEM0 + memoryIndex));
+    return ( baseAddress + (OFS_ADC12MEM0 + memoryIndex) );
     //(0x60 + memoryIndex) == offset of ADC12MEMx
 }
 
-uint8_t ADC12_B_isBusy(uint16_t baseAddress)
+uint8_t ADC12_B_isBusy (uint16_t baseAddress)
 {
     return (HWREG8(baseAddress + OFS_ADC12CTL1_L) & ADC12BUSY);
 }
+
 
 #endif
 //*****************************************************************************

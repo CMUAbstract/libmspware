@@ -1,5 +1,5 @@
 /* --COPYRIGHT--,BSD
- * Copyright (c) 2014, Texas Instruments Incorporated
+ * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,8 +59,7 @@ extern "C"
 //! \brief Used in the MPU_initThreeSegments() function as the param parameter.
 //
 //*****************************************************************************
-typedef struct MPU_initThreeSegmentsParam
-{
+typedef struct MPU_initThreeSegmentsParam {
     //! Valid values can be found in the Family User's Guide
     uint16_t seg1boundary;
     //! Valid values can be found in the Family User's Guide
@@ -87,6 +86,7 @@ typedef struct MPU_initThreeSegmentsParam
     //! - \b MPU_NO_READ_WRITE_EXEC - no read/write/execute rights
     uint8_t seg3accmask;
 } MPU_initThreeSegmentsParam;
+
 
 //*****************************************************************************
 //

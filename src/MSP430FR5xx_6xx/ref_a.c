@@ -1,5 +1,5 @@
 /* --COPYRIGHT--,BSD
- * Copyright (c) 2014, Texas Instruments Incorporated
+ * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -49,98 +49,86 @@
 
 #include <assert.h>
 
-void Ref_A_setReferenceVoltage(uint16_t baseAddress,
-                               uint8_t referenceVoltageSelect)
+void Ref_A_setReferenceVoltage (uint16_t baseAddress,
+    uint8_t referenceVoltageSelect)
 {
     HWREG8(baseAddress + OFS_REFCTL0_L) &= ~(REFVSEL_3);
     HWREG8(baseAddress + OFS_REFCTL0_L) |= referenceVoltageSelect;
 }
 
-void Ref_A_disableTempSensor(uint16_t baseAddress)
+void Ref_A_disableTempSensor (uint16_t baseAddress)
 {
     HWREG8(baseAddress + OFS_REFCTL0_L) |= REFTCOFF;
 }
 
-void Ref_A_enableTempSensor(uint16_t baseAddress)
+void Ref_A_enableTempSensor (uint16_t baseAddress)
 {
     HWREG8(baseAddress + OFS_REFCTL0_L) &= ~(REFTCOFF);
 }
 
-void Ref_A_enableReferenceVoltageOutput(uint16_t baseAddress)
+void Ref_A_enableReferenceVoltageOutput (uint16_t baseAddress)
 {
     HWREG8(baseAddress + OFS_REFCTL0_L) |= REFOUT;
 }
 
-void Ref_A_disableReferenceVoltageOutput(uint16_t baseAddress)
+void Ref_A_disableReferenceVoltageOutput (uint16_t baseAddress)
 {
     HWREG8(baseAddress + OFS_REFCTL0_L) &= ~(REFOUT);
 }
 
-void Ref_A_enableReferenceVoltage(uint16_t baseAddress)
+void Ref_A_enableReferenceVoltage (uint16_t baseAddress)
 {
     HWREG8(baseAddress + OFS_REFCTL0_L) |= REFON;
 }
 
-void Ref_A_disableReferenceVoltage(uint16_t baseAddress)
+void Ref_A_disableReferenceVoltage (uint16_t baseAddress)
 {
     HWREG8(baseAddress + OFS_REFCTL0_L) &= ~(REFON);
 }
 
-uint16_t Ref_A_getBandgapMode(uint16_t baseAddress)
+uint16_t Ref_A_getBandgapMode (uint16_t baseAddress)
 {
     return (HWREG16((baseAddress) + OFS_REFCTL0) & BGMODE);
 }
 
-bool Ref_A_isBandgapActive(uint16_t baseAddress)
+bool Ref_A_isBandgapActive (uint16_t baseAddress)
 {
-    if(HWREG16((baseAddress) + OFS_REFCTL0) & REFBGACT)
-    {
-        return (REF_A_ACTIVE);
-    }
-    else
-    {
-        return (REF_A_INACTIVE);
+    if (HWREG16((baseAddress) + OFS_REFCTL0) & REFBGACT){
+        return (REF_A_ACTIVE) ;
+    } else   {
+        return (REF_A_INACTIVE) ;
     }
 }
 
-uint16_t Ref_A_isRefGenBusy(uint16_t baseAddress)
+uint16_t Ref_A_isRefGenBusy (uint16_t baseAddress)
 {
     return (HWREG16((baseAddress) + OFS_REFCTL0) & REFGENBUSY);
 }
 
-bool Ref_A_isRefGenActive(uint16_t baseAddress)
+bool Ref_A_isRefGenActive (uint16_t baseAddress)
 {
-    if(HWREG16((baseAddress) + OFS_REFCTL0) & REFGENACT)
-    {
-        return (REF_A_ACTIVE);
-    }
-    else
-    {
-        return (REF_A_INACTIVE);
+    if (HWREG16((baseAddress) + OFS_REFCTL0) & REFGENACT){
+        return (REF_A_ACTIVE) ;
+    } else   {
+        return (REF_A_INACTIVE) ;
     }
 }
 
 bool Ref_A_isBufferedBandgapVoltageReady(uint16_t baseAddress)
 {
-    if(HWREG16((baseAddress) + OFS_REFCTL0) & REFBGRDY)
-    {
-        return (REF_A_READY);
-    }
-    else
-    {
-        return (REF_A_NOTREADY);
+    if (HWREG16((baseAddress) + OFS_REFCTL0) & REFBGRDY){
+        return (REF_A_READY) ;
+    } else   {
+        return (REF_A_NOTREADY) ;
     }
 }
 
 bool Ref_A_isVariableReferenceVoltageOutputReady(uint16_t baseAddress)
 {
-    if(HWREG16((baseAddress) + OFS_REFCTL0) & REFGENRDY)
-    {
-        return (REF_A_READY);
-    }
-    else
-    {
-        return (REF_A_NOTREADY);
+    if (HWREG16((baseAddress) + OFS_REFCTL0) & REFGENRDY){
+        return (REF_A_READY) ;
+    } else   {
+        return (REF_A_NOTREADY) ;
     }
 }
 

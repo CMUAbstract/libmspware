@@ -1,5 +1,5 @@
 /* --COPYRIGHT--,BSD
- * Copyright (c) 2014, Texas Instruments Incorporated
+ * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -50,10 +50,11 @@
 #include <assert.h>
 
 void FRAMCtl_write8(uint8_t *dataPtr,
-                    uint8_t *framPtr,
-                    uint16_t numberOfBytes)
+    uint8_t *framPtr,
+    uint16_t numberOfBytes
+    )
 {
-    while(numberOfBytes > 0)
+    while (numberOfBytes > 0)
     {
         //Write to Fram
         *framPtr++ = *dataPtr++;
@@ -61,11 +62,10 @@ void FRAMCtl_write8(uint8_t *dataPtr,
     }
 }
 
-void FRAMCtl_write16(uint16_t *dataPtr,
-                     uint16_t *framPtr,
-                     uint16_t numberOfWords)
+void FRAMCtl_write16(uint16_t *dataPtr,uint16_t *framPtr,
+		uint16_t numberOfWords)
 {
-    while(numberOfWords > 0)
+    while (numberOfWords > 0)
     {
         //Write to Fram
         *framPtr++ = *dataPtr++;
@@ -73,11 +73,10 @@ void FRAMCtl_write16(uint16_t *dataPtr,
     }
 }
 
-void FRAMCtl_write32(uint32_t *dataPtr,
-                     uint32_t *framPtr,
-                     uint16_t count)
+void FRAMCtl_write32(uint32_t *dataPtr,uint32_t *framPtr,
+		uint16_t count)
 {
-    while(count > 0)
+    while (count > 0)
     {
         //Write to Fram
         *framPtr++ = *dataPtr++;
@@ -85,11 +84,12 @@ void FRAMCtl_write32(uint32_t *dataPtr,
     }
 }
 
-void FRAMCtl_fillMemory32(uint32_t value,
-                          uint32_t *framPtr,
-                          uint16_t count)
+void FRAMCtl_fillMemory32 (uint32_t value,
+    uint32_t *framPtr,
+    uint16_t count
+    )
 {
-    while(count > 0)
+    while (count> 0)
     {
         //Write to Fram
         *framPtr++ = value;
@@ -97,13 +97,13 @@ void FRAMCtl_fillMemory32(uint32_t value,
     }
 }
 
-void FRAMCtl_enableInterrupt(uint8_t interruptMask)
+void FRAMCtl_enableInterrupt (uint8_t interruptMask)
 {
-    uint8_t waitSelection;
+	uint8_t waitSelection;
 
-    waitSelection = (HWREG8(FRAM_BASE + OFS_FRCTL0) & 0xFF);
-    // Clear lock in FRAM control registers
-    HWREG16(FRAM_BASE + OFS_FRCTL0) = FWPW | waitSelection;
+	waitSelection=(HWREG8(FRAM_BASE + OFS_FRCTL0) & 0xFF);
+	// Clear lock in FRAM control registers
+	HWREG16(FRAM_BASE + OFS_FRCTL0) = FWPW | waitSelection;
 
     // Enable user selected interrupt sources
     HWREG16(FRAM_BASE + OFS_GCCTL0) |= interruptMask;
@@ -111,31 +111,31 @@ void FRAMCtl_enableInterrupt(uint8_t interruptMask)
 
 uint8_t FRAMCtl_getInterruptStatus(uint16_t interruptFlagMask)
 {
-    return (HWREG16(FRAM_BASE + OFS_GCCTL1) & interruptFlagMask);
+	return ( HWREG16(FRAM_BASE + OFS_GCCTL1) & interruptFlagMask );
 }
 
 void FRAMCtl_disableInterrupt(uint16_t interruptMask)
 {
-    uint8_t waitSelection;
+	uint8_t waitSelection;
 
-    waitSelection = (HWREG8(FRAM_BASE + OFS_FRCTL0) & 0xFF);
-    //Clear lock in FRAM control registers
-    HWREG16(FRAM_BASE + OFS_FRCTL0) = FWPW | waitSelection;
+	waitSelection=(HWREG8(FRAM_BASE + OFS_FRCTL0) & 0xFF);
+	//Clear lock in FRAM control registers
+	HWREG16(FRAM_BASE + OFS_FRCTL0) = FWPW | waitSelection;
 
     HWREG16(FRAM_BASE + OFS_GCCTL0) &= ~(interruptMask);
 }
 
-void FRAMCtl_configureWaitStateControl(uint8_t waitState)
-{
-    // Clear lock in FRAM control registers
-    HWREG16(FRAM_BASE + OFS_FRCTL0) = FWPW;
-
-    HWREG8(FRAM_BASE + OFS_FRCTL0_L) &= ~NWAITS_7;
-    HWREG8(FRAM_BASE + OFS_FRCTL0_L) |= (waitState);
+void FRAMCtl_configureWaitStateControl(uint8_t waitState )
+{    
+	uint8_t tempVariable = HWREG8(FRAM_BASE + OFS_FRCTL0_L);
+	tempVariable &= ~NWAITS_7;
+	tempVariable |= waitState;
+	HWREG16(FRAM_BASE + OFS_FRCTL0) = ( FWPW | tempVariable );
 }
 
 void FRAMCtl_delayPowerUpFromLPM(uint8_t delayStatus)
 {
+#ifdef FRLPMPWR
     uint8_t waitSelection;
 
     waitSelection = (HWREG8(FRAM_BASE + OFS_FRCTL0) & 0xFF);
@@ -143,9 +143,11 @@ void FRAMCtl_delayPowerUpFromLPM(uint8_t delayStatus)
     // Clear lock in FRAM control registers
     HWREG16(FRAM_BASE + OFS_FRCTL0) = FWPW | waitSelection;
 
-    HWREG8(FRAM_BASE + OFS_GCCTL0_L) &= ~0x02;
-    HWREG8(FRAM_BASE + OFS_GCCTL0_L) |= delayStatus;
+	HWREG8(FRAM_BASE + OFS_GCCTL0_L) &= ~FRLPMPWR;
+	HWREG8(FRAM_BASE + OFS_GCCTL0_L) |= delayStatus;
+#endif
 }
+
 
 #endif
 //*****************************************************************************

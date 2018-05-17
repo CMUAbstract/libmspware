@@ -1,5 +1,5 @@
 /* --COPYRIGHT--,BSD
- * Copyright (c) 2014, Texas Instruments Incorporated
+ * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -49,76 +49,64 @@
 
 #include <assert.h>
 
-void CRC32_setSeed(uint32_t seed,
-                   uint8_t crcMode)
+void CRC32_setSeed(uint32_t seed, uint8_t crcMode)
 {
-    if(CRC16_MODE == crcMode)
-    {
+    if (CRC16_MODE == crcMode) {
         HWREG16(CRC32_BASE + OFS_CRC16INIRESW0) = seed;
     }
     else
     {
         HWREG16(CRC32_BASE + OFS_CRC32INIRESW1) = ((seed & 0xFFFF0000)
-                                                   >> 16);
+                >> 16);
         HWREG16(CRC32_BASE + OFS_CRC32INIRESW0) = (seed & 0xFFFF);
     }
 }
 
-void CRC32_set8BitData(uint8_t dataIn,
-                       uint8_t crcMode)
+void CRC32_set8BitData(uint8_t dataIn, uint8_t crcMode)
 {
-    if(CRC16_MODE == crcMode)
-    {
+    if (CRC16_MODE == crcMode) {
         HWREG8(CRC32_BASE + OFS_CRC16DIW0_L) = dataIn;
     }
-    else
-    {
+    else {
         HWREG8(CRC32_BASE + OFS_CRC32DIW0_L) = dataIn;
     }
 }
 
-void CRC32_set16BitData(uint16_t dataIn,
-                        uint8_t crcMode)
+void CRC32_set16BitData(uint16_t dataIn, uint8_t crcMode)
 {
-    if(CRC16_MODE == crcMode)
-    {
+    if (CRC16_MODE == crcMode) {
         HWREG16(CRC32_BASE + OFS_CRC16DIW0) = dataIn;
     }
-    else
-    {
+    else {
         HWREG16(CRC32_BASE + OFS_CRC32DIW0) = dataIn;
     }
+
 }
 
 void CRC32_set32BitData(uint32_t dataIn)
 {
+
     HWREG16(CRC32_BASE + OFS_CRC32DIW0) = dataIn & 0xFFFF;
     HWREG16(CRC32_BASE + OFS_CRC32DIW1) = (uint16_t) ((dataIn & 0xFFFF0000)
-                                                      >> 16);
+            >> 16);
 }
 
-void CRC32_set8BitDataReversed(uint8_t dataIn,
-                               uint8_t crcMode)
+void CRC32_set8BitDataReversed(uint8_t dataIn, uint8_t crcMode)
 {
-    if(CRC16_MODE == crcMode)
-    {
-        HWREG8(CRC32_BASE + OFS_CRC16DIRBW1_L) = dataIn;
-    }
-    else
-    {
+
+    if (CRC16_MODE == crcMode) {
+        HWREG8(CRC32_BASE + OFS_CRC16DIRBW0_L) = dataIn;
+    } else {
         HWREG8(CRC32_BASE + OFS_CRC32DIRBW1_L) = dataIn;
     }
 }
 
-void CRC32_set16BitDataReversed(uint16_t dataIn,
-                                uint8_t crcMode)
+void CRC32_set16BitDataReversed(uint16_t dataIn, uint8_t crcMode)
 {
-    if(CRC16_MODE == crcMode)
-    {
-        HWREG16(CRC32_BASE + OFS_CRC16DIRBW1) = dataIn;
-    }
-    else
-    {
+
+    if (CRC16_MODE == crcMode) {
+        HWREG16(CRC32_BASE + OFS_CRC16DIRBW0) = dataIn;
+    } else {
         HWREG16(CRC32_BASE + OFS_CRC32DIRBW1) = dataIn;
     }
 }
@@ -127,14 +115,13 @@ void CRC32_set32BitDataReversed(uint32_t dataIn)
 {
     HWREG16(CRC32_BASE + OFS_CRC32DIRBW1) = dataIn & 0xFFFF;
     HWREG16(CRC32_BASE + OFS_CRC32DIRBW0) = (uint16_t) ((dataIn & 0xFFFF0000)
-                                                        >> 16);
+            >> 16);
 }
 
 uint32_t CRC32_getResult(uint8_t crcMode)
 {
-    if(CRC16_MODE == crcMode)
-    {
-        return (HWREG16(CRC32_BASE + OFS_CRC16INIRESW0));
+    if (CRC16_MODE == crcMode) {
+        return (HWREG16(CRC32_BASE + OFS_CRC16INIRESW0) );
     }
     else
     {
@@ -148,9 +135,8 @@ uint32_t CRC32_getResult(uint8_t crcMode)
 
 uint32_t CRC32_getResultReversed(uint8_t crcMode)
 {
-    if(CRC16_MODE == crcMode)
-    {
-        return (HWREG16(CRC32_BASE + OFS_CRC16RESRW0));
+    if (CRC16_MODE == crcMode) {
+        return (HWREG16(CRC32_BASE + OFS_CRC16RESRW0) );
     }
     else
     {

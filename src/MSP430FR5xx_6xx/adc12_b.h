@@ -1,5 +1,5 @@
 /* --COPYRIGHT--,BSD
- * Copyright (c) 2014, Texas Instruments Incorporated
+ * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,8 +59,7 @@ extern "C"
 //! \brief Used in the ADC12_B_init() function as the param parameter.
 //
 //*****************************************************************************
-typedef struct ADC12_B_initParam
-{
+typedef struct ADC12_B_initParam {
     //! Is the signal that will trigger a sample-and-hold for an input signal
     //! to be converted.
     //! \n Valid values are:
@@ -119,8 +118,7 @@ typedef struct ADC12_B_initParam
 //! parameter.
 //
 //*****************************************************************************
-typedef struct ADC12_B_configureMemoryParam
-{
+typedef struct ADC12_B_configureMemoryParam {
     //! Is the selected memory buffer to set the configuration for.
     //! \n Valid values are:
     //! - \b ADC12_B_MEMORY_0
@@ -230,6 +228,7 @@ typedef struct ADC12_B_configureMemoryParam
     //! - \b ADC12_B_DIFFERENTIAL_MODE_ENABLE
     uint16_t differentialModeSelect;
 } ADC12_B_configureMemoryParam;
+
 
 //*****************************************************************************
 //
@@ -824,7 +823,8 @@ extern void ADC12_B_disableSamplingTimer(uint16_t baseAddress);
 //! positive reference voltage, the internal REF module must be used to control
 //! the voltage level. Note that if a conversion has been started with the
 //! startConversion() function, then a call to disableConversions() is required
-//! before this function may be called.
+//! before this function may be called. If conversion is not disabled, this
+//! function does nothing.
 //!
 //! \param baseAddress is the base address of the ADC12B module.
 //! \param param is the pointer to struct for ADC12B memory configuration.

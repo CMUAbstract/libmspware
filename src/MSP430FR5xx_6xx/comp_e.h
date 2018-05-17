@@ -1,5 +1,5 @@
 /* --COPYRIGHT--,BSD
- * Copyright (c) 2014, Texas Instruments Incorporated
+ * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,8 +59,7 @@ extern "C"
 //! \brief Used in the Comp_E_init() function as the param parameter.
 //
 //*****************************************************************************
-typedef struct Comp_E_initParam
-{
+typedef struct Comp_E_initParam {
     //! Selects the input to the positive terminal.
     //! \n Valid values are:
     //! - \b COMP_E_INPUT0 [Default]
@@ -118,6 +117,8 @@ typedef struct Comp_E_initParam
     //! - \b COMP_E_INVERTEDOUTPUTPOLARITY - the output should be inverted
     uint16_t invertedOutputPolarity;
 } Comp_E_initParam;
+
+
 
 //*****************************************************************************
 //
@@ -228,8 +229,8 @@ typedef struct Comp_E_initParam
 // for functions: Comp_E_setInterruptEdgeDirection().
 //
 //*****************************************************************************
-#define COMP_E_FALLINGEDGE                                           (!(CEIES))
-#define COMP_E_RISINGEDGE                                               (CEIES)
+#define COMP_E_RISINGEDGE                                            (!(CEIES))
+#define COMP_E_FALLINGEDGE                                              (CEIES)
 
 //*****************************************************************************
 //
@@ -423,10 +424,10 @@ extern void Comp_E_clearInterrupt(uint16_t baseAddress,
 //!        - \b COMP_E_INTERRUPT_FLAG_READY - Ready interrupt flag
 //!
 //! \return Logical OR of any of the following:
-//!         - \b Comp_E_OUTPUT_INTERRUPT_FLAG Output interrupt flag
-//!         - \b Comp_E_INTERRUPT_FLAG_INVERTED_POLARITY Output interrupt flag
+//!         - \b COMP_E_OUTPUT_INTERRUPT_FLAG Output interrupt flag
+//!         - \b COMP_E_INTERRUPT_FLAG_INVERTED_POLARITY Output interrupt flag
 //!         inverted polarity
-//!         - \b Comp_E_INTERRUPT_FLAG_READY Ready interrupt flag
+//!         - \b COMP_E_INTERRUPT_FLAG_READY Ready interrupt flag
 //!         \n indicating the status of the masked flags
 //
 //*****************************************************************************
@@ -445,13 +446,13 @@ extern uint8_t Comp_E_getInterruptStatus(uint16_t baseAddress,
 //! \param edgeDirection determines which direction the edge would have to go
 //!        to generate an interrupt based on the non-inverted interrupt flag.
 //!        Valid values are:
-//!        - \b COMP_E_FALLINGEDGE [Default] - sets the bit to generate an
-//!           interrupt when the output of the Comp_E falls from HIGH to LOW if
-//!           the normal interrupt bit is set(and LOW to HIGH if the inverted
+//!        - \b COMP_E_RISINGEDGE [Default] - sets the bit to generate an
+//!           interrupt when the output of the Comp_E rises from LOW to HIGH if
+//!           the normal interrupt bit is set(and HIGH to LOW if the inverted
 //!           interrupt enable bit is set).
-//!        - \b COMP_E_RISINGEDGE - sets the bit to generate an interrupt when
-//!           the output of the Comp_E rises from LOW to HIGH if the normal
-//!           interrupt bit is set(and HIGH to LOW if the inverted interrupt
+//!        - \b COMP_E_FALLINGEDGE - sets the bit to generate an interrupt when
+//!           the output of the Comp_E falls from HIGH to LOW if the normal
+//!           interrupt bit is set(and LOW to HIGH if the inverted interrupt
 //!           enable bit is set).
 //!        \n Modified bits are \b CEIES of \b CECTL1 register.
 //!
@@ -645,8 +646,8 @@ extern void Comp_E_swapIO(uint16_t baseAddress);
 //! \param baseAddress is the base address of the COMP_E module.
 //!
 //! \return One of the following:
-//!         - \b Comp_E_LOW
-//!         - \b Comp_E_HIGH
+//!         - \b COMP_E_LOW
+//!         - \b COMP_E_HIGH
 //!         \n indicating the output value of the Comp_E module
 //
 //*****************************************************************************

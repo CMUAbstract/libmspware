@@ -1,5 +1,5 @@
 /* --COPYRIGHT--,BSD
- * Copyright (c) 2014, Texas Instruments Incorporated
+ * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -72,31 +72,6 @@ extern "C"
 // Prototypes for the APIs.
 //
 //*****************************************************************************
-
-//*****************************************************************************
-//
-//! \brief Enables the low power reset. SVSH does not reset device, but
-//! triggers a system NMI
-//!
-//!
-//! Modified bits of \b PMMCTL0 register.
-//!
-//! \return None
-//
-//*****************************************************************************
-extern void PMM_enableLowPowerReset(void);
-
-//*****************************************************************************
-//
-//! \brief Disables the low power reset. SVSH resets device.
-//!
-//!
-//! Modified bits of \b PMMCTL0 register.
-//!
-//! \return None
-//
-//*****************************************************************************
-extern void PMM_disableLowPowerReset(void);
 
 //*****************************************************************************
 //
