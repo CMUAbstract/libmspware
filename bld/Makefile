@@ -9,6 +9,11 @@ LIBS += -lmspbuiltins
 endif # TOOLCHAIN != gcc
 
 
+# FAMILYDEF is defined by Maker
+# This switch is not exhaustive, we has branches only for families we use so far
+ifeq ($(FAMILYDEF),__MSP430FR__)
+FAMILY_DIR = MSP430FR5xx_6xx
+
 OBJECTS = \
 	adc12_b.o \
 	aes256.o \
@@ -45,12 +50,52 @@ OBJECTS = \
 	sdhs.o \
 	uups.o \
 
-# FAMILYDEF is defined by Maker
-# This switch is not exhaustive, we has branches only for families we use so far
-ifeq ($(FAMILYDEF),__MSP430FR__)
-FAMILY_DIR = MSP430FR5xx_6xx
 else ifeq ($(FAMILYDEF),__MSP430F__)
 FAMILY_DIR = MSP430F5xx_6xx
+
+OBJECTS = \
+	adc10_a.o \
+	ctsd16.o \
+	eusci_b_spi.o \
+	mpy32.o \
+	rtc_a.o \
+	tec.o \
+	usci_a_spi.o \
+	adc12_a.o \
+	dac12_a.o \
+	flashctl.o \
+	oa.o \
+	rtc_b.o \
+	timer_a.o \
+	usci_a_uart.o \
+	aes.o \
+	dma.o \
+	gpio.o \
+	pmap.o \
+	rtc_c.o \
+	timer_b.o \
+	usci_b_i2c.o \
+	battbak.o \
+	eusci_a_spi.o \
+	lcd_b.o \
+	pmm.o \
+	sd24_b.o \
+	timer_d.o \
+	usci_b_spi.o \
+	comp_b.o \
+	eusci_a_uart.o \
+	lcd_c.o \
+	ram.o \
+	sfr.o \
+	tlv.o \
+	wdt_a.o \
+	crc.o \
+	eusci_b_i2c.o \
+	ldopwr.o \
+	ref.o \
+	sysctl.o \
+	ucs.o \
+
 else # FAMILYDEF
 $(error Unsupported or unimplemented MCU family)
 endif # FAMILYDEF
@@ -59,3 +104,6 @@ override SRC_ROOT = ../../src/$(FAMILY_DIR)
 
 override CFLAGS += \
 	-I$(SRC_ROOT) \
+
+# Silence some warnings. This is upstream code, so we assume it's correct.
+override CFLAGS += -Wno-parentheses -Wno-maybe-uninitialized
