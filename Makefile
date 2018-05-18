@@ -89,7 +89,7 @@ else # FAMILYDEF
 $(error Unsupported or unimplemented MCU family)
 endif # FAMILYDEF
 
-include ../Makefile.family # defines FAMILY_DIR
+include ../../Makefile.family # defines FAMILY_DIR
 
 override SRC_ROOT = ../../src/$(FAMILY_DIR)
 
