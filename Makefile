@@ -1,14 +1,5 @@
 LIB = libmspware
 
-ifeq ($(TOOLCHAIN),gcc)
-DEPS += libmspbuiltins
-else # TOOLCHAIN == gcc 
-CFLAGS += -I$(LIB_ROOT)/libmspbuiltins/src/include
-LFLAGS += -L$(LIB_ROOT)/libmspbuiltins/bld/gcc
-LIBS += -lmspbuiltins
-endif # TOOLCHAIN != gcc
-
-
 # FAMILYDEF is defined by Maker
 # This switch is not exhaustive, we has branches only for families we use so far
 ifeq ($(FAMILYDEF),__MSP430FR__)
