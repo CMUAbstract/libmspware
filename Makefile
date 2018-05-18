@@ -104,6 +104,6 @@ override SRC_ROOT = ../../src/$(FAMILY_DIR)
 
 override CFLAGS += \
 	-I$(SRC_ROOT) \
+	-Wno-parentheses -Wno-maybe-uninitialized \
 
-# Silence some warnings. This is upstream code, so we assume it's correct.
-override CFLAGS += -Wno-parentheses -Wno-maybe-uninitialized
+include $(MAKER_ROOT)/Makefile.$(TOOLCHAIN)
