@@ -1,8 +1,8 @@
 LIB = libmspware
 
-# FAMILYDEF is defined by Maker
+# FAMILY is defined by Maker
 # This switch is not exhaustive, we has branches only for families we use so far
-ifeq ($(FAMILYDEF),__MSP430FR__)
+ifeq ($(FAMILY),MSP430FR)
 
 OBJECTS = \
 	adc12_b.o \
@@ -40,7 +40,7 @@ OBJECTS = \
 	sdhs.o \
 	uups.o \
 
-else ifeq ($(FAMILYDEF),__MSP430F__)
+else ifeq ($(FAMILY),MSP430F)
 
 OBJECTS = \
 	adc10_a.o \
@@ -85,9 +85,9 @@ OBJECTS = \
 	sysctl.o \
 	ucs.o \
 
-else # FAMILYDEF
+else # FAMILY
 $(error Unsupported or unimplemented MCU family)
-endif # FAMILYDEF
+endif # FAMILY
 
 include ../../Makefile.family # defines FAMILY_DIR
 
