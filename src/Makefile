@@ -3,7 +3,7 @@
 #
 
 DEVICE  = msp430fr5969
-SUPPORT_FILE_DIRECTORY = /opt/ti-mspgcc/include
+SUPPORT_FILE_DIRECTORY = /opt/ti/mspgcc3/include
 
 SRC = $(wildcard *.c)
 OBJ = $(SRC:.c=.o)
